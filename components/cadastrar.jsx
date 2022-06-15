@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import read from './read'
 import Head from 'next/head'
 
-export default function cadastrar() {
+export default function Home() {
     
 //definir a coleção 
 const contato = collection(database,'contato')
@@ -23,11 +23,13 @@ const contato = collection(database,'contato')
       email: email,
       telefone: telefone,
       mensagem: mensagem
+
     }).then(()=>{
       SetNome('')
       SetEmail('')
       Settelefone('')
       SetMensagem('')
+      window.location.reload()
     })
   }
 
