@@ -1,5 +1,5 @@
 import { database } from '../services/firebase'
-import { collection, deleteDoc, doc, getDocs, orderBy, query } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, orderBy, query, getDoc } from 'firebase/firestore'
 import { useState, useEffect } from 'react'
 
 export default function read(){
@@ -21,7 +21,34 @@ export default function read(){
     read()
   },[])
 
-  //Função do botão excluir
+  //Rotina update 
+  //Mostrar o contato selecionado
+  const [ID,setID] = useState(null)
+  const [contatoUnico,setContatoUnico] = useState({})
+  const [mostrar,setMostrar] = useState(false)
+  const [nome,setNome]= useState("")
+  const [email,setEmail]= useState("")
+  const [telefone,setTelefone]= useState("")
+  const [mensagem,setMensagem]= useState("")
+
+  const show = async(id)=>{
+    setID(id)
+    if(ID!=null){
+      const contatoSimples = doc(database,"contato",ID)
+      const resultado = await getDoc(contatoSimples)
+      setContatoUnico({...resultado.data(),id:resultado.id})
+      setNome(contatoUnico.nome)
+      setEmail(contatoUnico.email)
+      setTelefone(contatoUnico.telefone)
+      setMensagem(contatoUnico.mensagem)
+      setMostrar(true)
+    }
+  }
+  useEffect(()=>{
+    show()
+  },[ID])
+
+  //Função o botão excluir
   const deleteBtn = (id) =>{
     const documento = doc(database,"contato",id)
     deleteDoc(documento)
@@ -32,7 +59,25 @@ export default function read(){
   
         return(
           <>
-          
+          {mostrar ?(
+            <div>
+              <h3 className="text-center">Alterar</h3>
+
+              <input type="text" placeholder="Nome" className="form-control" required onChange={event=>SetNome(event.target.value)} value = {nome} /><br />
+    
+            <input type="email" placeholder="Email" className="form-control" required onChange={event=>SetEmail(event.target.value)} value = {email} /><br />
+    
+            <input type="tel" placeholder="Telefone" className="form-control" required onChange={event=>Settelefone(event.target.value)} value = {telefone} /><br />
+    
+            <textarea placeholder="Mensagem" className="form-control" required onChange={event=>SetMensagem(event.target.value)} value = {mensagem} ></textarea><br />
+            
+            <input type="submit" value="Salvar" className="btn btn-outline-dark form-control"/>
+            </div>
+          ):(
+            <></>
+          )}
+
+
                  <h3 className="text-center">Exibir</h3><br />
              {lista.map((lista)=>{
                return(
@@ -49,7 +94,7 @@ export default function read(){
             </div>
             <div className="card-footer">
               <div className="input-group">
-               <input type="button" value="Alterar" className="btn btn-outline-warning form-control" />
+               <input type="button" onClick={()=>show(lista.id)} value="Alterar" className="btn btn-outline-warning form-control" />
                <input type="button" onClick={()=>deleteBtn(lista.id)} value="Excluir" className="btn btn-outline-danger form-control" />
               </div>
             </div>
