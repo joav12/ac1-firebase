@@ -1,39 +1,26 @@
 import Head from 'next/head'
-import Cadastrar from '../components/cadastrar'
-import Read from '../components/read'
 
+//importar componentes
+import Create from '../components/Create'
+import Read from '../components/Read'
 
 export default function Home() {
-  return(
+  return (
     <>
-    
-    <Head>
+      <Head>
+        <title>Crud simples com firestore</title>
+      </Head>
 
-      <title>Crud simples com firestorm</title>
-
-    </Head>
-    
-    <main className="container">
-
-      <div className="row">
-
-        <div className="col-lg">
-
-            <Cadastrar/>
-
+      <main className="container">
+        <div className="row">
+          <div className="col-md">
+            <Create />
+          </div>
+          <div className="col-md">
+            <Read />
+          </div>
         </div>
-
-        <div className="col-lg">
-
-          <Read/>
-
-        </div>
-
-      </div>
-
-    </main>
-
+      </main>
     </>
   )
-
 }
